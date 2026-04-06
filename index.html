@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocolo Aquiles</title>
+
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0f172a;
+    color: white;
+    padding: 15px;
+}
+
+h1 {
+    text-align: center;
+    color: #22c55e;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+
+h2 {
+    color: #38bdf8;
+    margin-bottom: 12px;
+}
+
+label {
+    display: block;
+    padding: 10px;
+    border-radius: 10px;
+    background: #334155;
+    margin-bottom: 8px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background: #22c55e;
+    border: none;
+    border-radius: 12px;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.status {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏃 Protocolo Aquiles</h1>
+
+<div class="card">
+<h2>📅 Atividades do Dia</h2>
+
+<label><input type="checkbox" id="corrida"> Corrida leve</label>
+<label><input type="checkbox" id="iso"> Isometria panturrilha</label>
+<label><input type="checkbox" id="excentrico"> Exercício excêntrico</label>
+<label><input type="checkbox" id="gluteo"> Treino de glúteo</label>
+<label><input type="checkbox" id="mobilidade"> Mobilidade tornozelo</label>
+
+</div>
+
+<div class="card">
+<h2>📊 Nível de Dor</h2>
+
+<label><input type="radio" name="dor" value="ok"> Dor leve (0–3)</label>
+<label><input type="radio" name="dor" value="medio"> Dor moderada (4–5)</label>
+<label><input type="radio" name="dor" value="alto"> Dor alta (>5)</label>
+
+</div>
+
+<div class="card">
+<h2>🧠 Como estou hoje?</h2>
+
+<label><input type="checkbox" id="melhora"> Melhorou em relação a ontem</label>
+<label><input type="checkbox" id="acordar"> Acordei melhor</label>
+<label><input type="checkbox" id="caminhar"> Sem dor ao caminhar</label>
+
+</div>
+
+<button onclick="salvar()">Salvar Dia ✔️</button>
+<button onclick="resetar()">Reiniciar 🔄</button>
+
+<div class="status" id="status"></div>
+
+<script>
+function salvar() {
+    const dados = {
+        corrida: corrida.checked,
+        iso: iso.checked,
+        excentrico: excentrico.checked,
+        gluteo: gluteo.checked,
+        mobilidade: mobilidade.checked,
+        melhora: melhora.checked,
+        acordar: acordar.checked,
+        caminhar: caminhar.checked,
+        dor: document.querySelector('input[name="dor"]:checked')?.value,
+        data: new Date().toLocaleDateString()
+    };
+
+    localStorage.setItem("checklistAquiles", JSON.stringify(dados));
+    document.getElementById("status").innerText = "✔️ Dia salvo!";
+}
+
+function resetar() {
+    localStorage.removeItem("checklistAquiles");
+    location.reload();
+}
+
+window.onload = function() {
+    const dados = JSON.parse(localStorage.getItem("checklistAquiles"));
+    if (!dados) return;
+
+    corrida.checked = dados.corrida;
+    iso.checked = dados.iso;
+    excentrico.checked = dados.excentrico;
+    gluteo.checked = dados.gluteo;
+    mobilidade.checked = dados.mobilidade;
+    melhora.checked = dados.melhora;
+    acordar.checked = dados.acordar;
+    caminhar.checked = dados.caminhar;
+
+    if (dados.dor) {
+        document.querySelector(`input[value="${dados.dor}"]`).checked = true;
+    }
+
+    document.getElementById("status").innerText = "Último registro: " + dados.data;
+}
+</script>
+
+</body>
+</html>
